@@ -47,18 +47,25 @@ void bellman_ford(int V,int E, int edges[E][3],int source){
 }
 
 int main(){
-    int V = 4;
-    int E = 5;
-    int source = 0;
-
-    // Define the edges: {Source, Destination, Weight}
-    int edges[5][3] = {
-        {0, 1, 5},  // Path from source
-        {0, 2, 4},
-        {1, 2, 1},
-        {2, 3, 1},
-        {3, 1, -3} // Creates the negative cycle
-    };
+    int V,E,source;
+    
+    printf("Enter no. of Vertices: ");
+    scanf("%d",&V);
+    printf("Enter no. of Edges: ");
+    scanf("%d",&E);
+    
+    int edges[E][3];
+    for(int i = 0; i<E;i++){
+        printf("Enter value of source vertex: ");
+        scanf("%d",&edges[i][0]);
+        printf("Enter value of destination vertex: ");
+        scanf("%d",&edges[i][1]);
+        printf("Enter Edge Weight: ");
+        scanf("%d",&edges[i][2]);
+    }
+    
+    printf("Enter the source: ");
+    scanf("%d",&source);
 
     bellman_ford(V,E,edges,source);
     return 0;
