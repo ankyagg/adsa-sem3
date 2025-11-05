@@ -7,61 +7,70 @@ struct node{
     struct node *left;
 };
 
-struct Node* createNode(int data) {
-    struct Node* newnode = (struct node*)malloc(sizeof(struct node));
-    if(newnode == NULL){
-        printf("Memory allocation failed");
-    }
-    newnode->data = data;
-    newnode->left = NULL;
-    newnode->right = NULL;
-    return newnode;
-};
+struct node *node = NULL;
 
-struct Node* insert(struct Node* node,int data){
+struct node *insert(int data,struct node* node){
     if(node==NULL){
-        return createNode(data);
+        struct node *new = (struct node*) malloc(sizeof(struct node));
+        new->data = data;
+        new->left = NULL;
+        new->right = NULL;
+        return new;
     }
-    if(data<node->data){
-        node->left = insert(data,node->left);
-    }
-    else if(data>node->data){
+    if(data>node->data){
         node->right = insert(data,node->right);
     }
+    else if(data< node->data){
+        node->left = insert(data,node->left);
+    }
     return node;
-};
+}
 
-void preorder(struct Node* node){
+void preorder(struct node* node){
     if(node!=NULL){
         printf("%d ",node->data);
         preorder(node->left);
         preorder(node->right);
     }
-};
-
-void inorder(struct Node* node){
-    if(node!=NULL){
-        inorder(node->left);
-        printf("%d ",node->data);
-        inorder(node->right);
-    }
-};
-
-
-void postorder(struct Node* node){
+}
+void postorder(struct node* node){
     if(node!=NULL){
         postorder(node->left);
         postorder(node->right);
         printf("%d ",node->data);
     }
-};
+}
+void inorder(struct node* node){
+    if(node!=NULL){
+        inorder(node->left);
+        printf("%d ",node->data);
+        inorder(node->right);
+    }
+}
 
 int main(){
-    struct Node* node = NULL;
-    int sequence[] = {5,6,9,22,41,9};
-    int n = sizeof(sequence)/sizeof(sequence[0]);
-    for(int i = 0 ; i<n;i++){
-        node = insert(node,sequence[i]);
+    int data;
+    while(1){
+    printf("\n1.Insert\n2.Preorder\n3.Postorder\n4.Inorder");
+    printf("Enter your choice: ");
+    int choice ;
+    scanf("%d",&choice);
+    switch(choice){
+        case 1:
+        printf("Enter value to be inserted:");
+        scanf("%d",&data);
+        node = insert(data,node);
+        break;
+        case 2:
+        preorder(node);
+        break;
+        case 3:
+        postorder(node);
+        break;
+        case 4:
+        inorder(node);
+        break;
+
     }
-    preorder(node);
+    }
 }
