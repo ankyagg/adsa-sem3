@@ -1,74 +1,52 @@
 #include <stdio.h>
-#include <stdbool.h>
-#include <limits.h>
+#define MAX 10
 
-#define V 5
+int adj[MAX][MAX];
+int visited[MAX];
 
-int minKey(int key[], bool mstSet[]) {
-    int min = INT_MAX, min_index;
+void main() {
+    int node, cost = 0, n;
 
-    for (int v = 0; v < V; v++) {
-        if (mstSet[v] == false && key[v] < min) {
-            min = key[v];
-            min_index = v;
+    printf("\nEnter the number of nodes: ");
+    scanf("%d", &n);
+
+    printf("\nEnter the weights:");
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            printf("\n%d-%d: ", i, j);
+            scanf("%d", &adj[i][j]);
         }
     }
-    return min_index;
-}
 
-void printMST(int parent[], int graph[V][V]) {
-    printf("Edge \tWeight\n");
-    int total_weight = 0;
-
-    for (int i = 1; i < V; i++) {
-        printf("%d - %d \t  %d\n", parent[i], i, graph[i][parent[i]]);
-        total_weight += graph[i][parent[i]];
-    }
-    printf("Total Minimum Spanning Tree Weight: %d\n", total_weight);
-}
-
-void primMST(int graph[V][V]) {
-    int parent[V];
-    int key[V];
-    bool mstSet[V];
-
-    for (int i = 0; i < V; i++) {
-        key[i] = INT_MAX;
-        mstSet[i] = false;
+    for (int i = 0; i < n; i++) {
+        visited[i] = 0;
     }
 
-    key[0] = 0;
-    parent[0] = -1;
+    visited[0] = 1;
+    int vertices = 0;
 
-    for (int count = 0; count < V - 1; count++) {
+    while (vertices < n - 1) {
+        int min = 999, u = -1, v = -1;
 
-        int u = minKey(key, mstSet);
-
-        mstSet[u] = true;
-
-        for (int v = 0; v < V; v++) {
-
-            if (graph[u][v] != 0 && mstSet[v] == false && graph[u][v] < key[v]) {
-                parent[v] = u;
-                key[v] = graph[u][v];
+        for (int i = 0; i < n; i++) {
+            if (visited[i]) {
+                for (int j = 0; j < n; j++) {
+                    if (!visited[j] && adj[i][j] && adj[i][j] < min) {
+                        min = adj[i][j];
+                        u = i;
+                        v = j;
+                    }
+                }
             }
         }
+
+        if (u != -1 && v != -1) {
+            printf("\n%d - %d : %d", u, v, min);
+            visited[v] = 1;
+            cost += min;
+            vertices++;
+        }
     }
 
-    printMST(parent, graph);
-}
-
-int main() {
-    int graph[V][V] = {
-        {0, 2, 0, 6, 0},
-        {2, 0, 3, 8, 5},
-        {0, 3, 0, 0, 7},
-        {6, 8, 0, 0, 9},
-        {0, 5, 7, 9, 0}
-    };
-
-    printf("--- Prim's Algorithm ---\n");
-    primMST(graph);
-
-    return 0;
+    printf("\nMin cost: %d", cost);
 }
