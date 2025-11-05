@@ -23,10 +23,19 @@ int knapsack_dp(int W, int weights[], int values[], int n) {
 
     // print max value
     printf("\nMaximum value: %d\n", dp[n][W]);
+    
+    //dp table
+    printf("\nDP Table:\n");
+    for (int i = 0; i <= n; i++) {
+        for (int w = 0; w <= W; w++) {
+            printf("%3d ", dp[i][w]);
+        }
+        printf("\n");
+    }
 
     // find which items were chosen
     int w = W;
-    printf("Items chosen (1-based index): ");
+    printf("Items chosen : ");
     for (int i = n; i > 0 && w > 0; i--) {
         if (dp[i][w] != dp[i - 1][w]) {  // means item was included
             printf("%d ", i);
