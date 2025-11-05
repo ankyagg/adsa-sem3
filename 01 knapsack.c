@@ -36,17 +36,6 @@ int knapsack_dp(int W, int weights[], int values[], int n) {
 
 // --- Main Driver Code ---
 int main() {
-    // Item 1: value=60, weight=10
-    // Item 2: value=100, weight=20
-    // Item 3: value=120, weight=30
-    int values[] = {60, 100, 120,600};
-    int weights[] = {10, 20, 30,45};
-
-    // Knapsack capacity
-    int W = 70;
-
-    // Number of items
-    int n = sizeof(values) / sizeof(values[0]);
 
     printf("0/1 Knapsack Problem using Dynamic Programming\n");
     printf("Items: {Value, Weight}\n");
@@ -61,3 +50,4 @@ int main() {
 
     return 0;
 }
+
