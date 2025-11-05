@@ -1,101 +1,120 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-struct node{
+struct node {
     int data;
-    struct node* right;
-    struct node* left;
+    struct node *right;
+    struct node *left;
 };
 
-struct node* root = NULL;
+struct node* root=NULL;
 
-struct node* insert(struct node* root,int n){
+struct node* insert(int n,struct node *root){
     if(root==NULL){
-        struct node* newnode = (struct node*)malloc(sizeof(struct node));
-        newnode->data = n;
-        newnode->left = NULL;
-        newnode->right = NULL;
-        return newnode;
+        struct node *new = (struct node*)malloc(sizeof(struct node));
+        new->data = n;
+        new->left = NULL;
+        new->right = NULL;
+        return new;
     }
     if(n<root->data){
-        root->left=insert(root->left,n);
+        root->left=insert(n,root->left);
     }
     else if(n>root->data){
-        root->right = insert(root->right,n);
+        root->right = insert(n,root->right);
     }
     else{
-        printf("Element already exists");
+        printf("Already exists");
     }
     return root;
 };
 
-struct node* delete(struct node* root,int m){
+struct node* delete(int key,struct node* root){
     if(root==NULL){
-        printf("Element not found\n");
-        return root;
+        printf("Element not found");
     }
-    else{
-        if(m<root->data){
-            root->left = delete(root->left,m);
+    else {
+        if(key<root->data){
+            root->left = delete(key,root->left);
         }
-        else if(m>root->data){
-            root->right = delete(root->right,m);
+        else if(key>root->data){
+            root->right = delete(key,root->right);
         }
         else{
-            if(root->left==NULL){
+            if(root->left == NULL && root->right == NULL){
+                free(root);
+                return NULL;
+            }
+            else if(root->left==NULL){
                 struct node* temp = root->right;
                 free(root);
                 return temp;
             }
             else if(root->right==NULL){
-                struct node* temp = root->left;
+                struct node *temp = root->left;
                 free(root);
                 return temp;
             }
             struct node *temp = root->left;
-            while (temp->right != NULL)
-                temp = temp->right;
+            while(temp->right!=NULL){
+                temp=temp->right;
+            }
             root->data = temp->data;
-            root->left = delete(root->left, temp->data);
+            root->left=delete(temp->data,root->left);
         }
     }
     return root;
 };
 
-struct node* search(struct node* root,int n ){
-    if(root==NULL){
-        return NULL;
+struct node *search(struct node *root,int key){
+    if(root==NULL) return NULL;
+    else if(root->data == key){
+        printf("%d",root->data);
+        return root;
     }
-    if(root->data == n){
-        printf("Element Found %d\n",n);
-    }
-    else if (n<root->data){
-        return search(root->left,n);
+    else if(key> root->data){
+        return search(root->right,key);
+        
     }
     else{
-        return search(root->right,n);
+        return search(root->left,key);
     }
-};
+}
 
-void display(struct node* root){
+void display(struct node *root){
     if(root!=NULL){
         display(root->left);
-        printf("%d ,",root->data);
+        printf("%d, ",root->data);
         display(root->right);
     }
 }
 
 int main(){
-    root = insert(root, 50);
-    insert(root, 30);
-    insert(root, 70);
-    insert(root, 20);
-    insert(root, 40);
-    insert(root, 60);
-    insert(root, 80);
-    search(root,40);
-    display(root);
-
+    int n;
+    while(1){
+        int choice;
+        printf("1.Insert\n2.Delete\n3.Search\n4.Display");
+        printf("Enter your choice : ");
+        scanf("%d",&choice);
+        switch(choice){
+            case 1: 
+            printf("Enter value to be inserted: ");
+            scanf("%d",&n);
+            root = insert(n,root);
+            break;
+            case 2: 
+            printf("Enter value to be deleted: ");
+            scanf("%d",&n);
+            delete(n,root);
+            break;
+            case 3: 
+            printf("Enter value to be searched: ");
+            scanf("%d",&n);
+            search(root,n);
+            break;
+            case 4: 
+            display(root);
+            break;
+        }
+    }
 }
-
-
